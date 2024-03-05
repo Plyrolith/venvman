@@ -22,7 +22,7 @@ class Venv:
     def __init__(
         self,
         venv_path: str | Path,
-        requirements_path: str | Path | None,
+        requirements_path: str | Path | None = None,
         logger: Logger | None = None,
     ):
         """
@@ -34,8 +34,8 @@ class Venv:
             - logger (Logger | None): Logger instance for alternative message output
         """
         self.venv_path = Path(venv_path)
-        self.pip_path = Path(venv_path / "bin" / "pip")
-        self.python_path = Path(venv_path / "bin" / "python")
+        self.pip_path = self.venv_path / "bin" / "pip"
+        self.python_path = self.venv_path / "bin" / "python"
         self.requirements_path = requirements_path
         self.logger = logger
 
