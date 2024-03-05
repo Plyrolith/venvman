@@ -7,6 +7,7 @@ import venv
 from logging import Logger
 from pathlib import Path
 
+
 class Venv:
     """
     Manage a virtual environment for the current Python interpreter.
