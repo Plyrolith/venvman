@@ -1,10 +1,10 @@
 # VenvMan
 Since some DCCs (e.g. Blender) do not come with built-in virtual environment management, many add-ons install pip packages to the global usersite using the `--user` flag. This is not optimal, since those packages might conflict with other applications and multiple versions cannot co-exist.
 
-VenvMan provides a straight forward way to create and manage virtual environments for any host software's Python binary and install all required modules in a location of the developer's choice. Installed packages are dynamically added to the usersite `(sys.path)` on runtime.
+VenvMan provides a straight forward way to create and manage virtual environments for any host software's Python binary and install all required modules in a location of the developer's choice. Installed packages are dynamically added to the `PYTHONPATH`/usersite `(sys.path)` on runtime.
 
 # Requirements
-`venv` and `pip` modules have to be available to the host Python interpreter (`venv` has been included as a standard library since Python `3.3`).
+`venv` and module has to be available to the host Python interpreter (`venv` has been included as a standard library since Python `3.3`).
 Although this module should work on Windows, it has only been tested in Linux environments.
 
 # Installation
@@ -18,19 +18,18 @@ git submodule add https://github.com/plyrolith/venvman
 This is a simplified example for managing a virtual environment from within a Blender add-on.
 
 ```python
-import bpy
 from pathlib import Path
 
 from .venvman import Venv
 
 # Define the path to the virtual environment
-venv_path = Path(bpy.utils.script_path_user(), "my_venv")
+venv_path = Path.home() / ".virtualenvs" / "my_env"
 
 # Optionally add the path to the requirements.txt
 requirements_path = Path("/path/to/requirements.txt")
 
 # Create a venv manager instance
-venv = Venv(venv_path, requirements_path)
+venv = Venv(venv_path, requirements_path, verbose=True)
 
 # Ensure the environment is valid, create if necessary and add to path
 venv.initialize()

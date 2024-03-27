@@ -1,1 +1,1 @@
-from .venvman import Venv
+from .venvman import VenvManager
