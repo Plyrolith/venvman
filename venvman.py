@@ -111,7 +111,6 @@ class VenvManager(EnvBuilder):
 
         if is_valid_exe:
             self.print("Virtual environment verified")
-            os.environ["VIRTUAL_ENV"] = str(self.env_dir)
 
         else:
             # If the virtual environment exists but is invalid recreate it
@@ -123,6 +122,7 @@ class VenvManager(EnvBuilder):
             self.create(self.env_dir)
 
         self.append_to_path()
+        os.environ["VIRTUAL_ENV"] = str(self.env_dir)
 
         return self.env_dir
 
