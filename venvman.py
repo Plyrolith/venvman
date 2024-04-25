@@ -61,11 +61,18 @@ class VenvManager(EnvBuilder):
         Ensure the virtual environment's site-packages is in the path.
         """
         context = self.ensure_directories(self.env_dir)
-        if context.lib_path not in sys.path:
-            self.print(f"Adding {context.lib_path} to PYTHONPATH")
-            sys.path.append(context.lib_path)
+        if hasattr(context, "lib_path"):
+            lib_path = context.lib_path
         else:
-            self.print(f"{context.lib_path} already in PYTHONPATH")
+            major = sys.version_info.major
+            minor = sys.version_info.minor
+            lib_path = f"{context.env_dir}/lib/python{major}.{minor}/site-packages"
+
+        if lib_path not in sys.path:
+            self.print(f"Adding {lib_path} to PYTHONPATH")
+            sys.path.append(lib_path)
+        else:
+            self.print(f"{lib_path} already in PYTHONPATH")
 
     def initialize(self) -> Path:
         """
