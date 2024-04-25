@@ -90,6 +90,8 @@ class VenvManager(EnvBuilder):
         executable_path = Path(context.executable).resolve()
         env_exe_path = Path(context.env_exe).resolve()
         sys_executable_path = Path(sys.executable).resolve()
+
+        is_valid_exe = False
         if (
             executable_path.exists()
             and env_exe_path.exists()
@@ -99,6 +101,15 @@ class VenvManager(EnvBuilder):
             )
             and self.pip_path.exists()
         ):
+            # Call the executable and check its return code
+            try:
+                check_args = (env_exe_path, "-c", "import sys; print(sys.executable)")
+                subprocess.check_call(check_args)
+                is_valid_exe = True
+            except subprocess.CalledProcessError:
+                self.print("Non-zero return code from python executable")
+
+        if is_valid_exe:
             self.print("Virtual environment verified")
             os.environ["VIRTUAL_ENV"] = str(self.env_dir)
 
