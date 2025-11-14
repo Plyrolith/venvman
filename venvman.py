@@ -28,6 +28,10 @@ class VenvManager(EnvBuilder):
     def pip_path(self) -> Path:
         return self.env_dir / "bin" / "pip"
 
+    @property
+    def python_path(self) -> Path:
+        return self.env_dir / "bin" / "python"
+
     def __init__(
         self,
         venv_path: Path | str,
