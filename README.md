@@ -29,7 +29,7 @@ venv_path = Path.home() / ".virtualenvs" / "my_env"
 requirements_path = Path("/path/to/requirements.txt")
 
 # Create a venv manager instance
-venv = Venv(venv_path, requirements_path, verbose=True)
+venv = VenvManager(venv_path, requirements_path, verbose=True)
 
 # Ensure the environment is valid, create if necessary and add to path
 venv.initialize()
