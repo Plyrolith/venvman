@@ -228,21 +228,6 @@ class VenvManager(EnvBuilder):
         if proc.returncode != 0:
             raise Exception(f"Failed to install script {name}")
 
-    def install_setuptools(self):
-        """
-        Install setuptools in the virtual environment.
-        """
-        context = self.ensure_directories(self.env_dir)
-
-        self.print("Installing setuptools")
-        url = "https://bootstrap.pypa.io/ez_setup.py"
-        self.install_script("setuptools", url)
-
-        # Clean up the downloaded setuptools archive
-        bin_path = Path(context.bin_path)
-        for file in bin_path.glob("setuptools-*.tar.gz"):
-            file.unlink()
-
     def freeze_requirements(self):
         """
         Create or update requirements.txt with all packages in the current version.
