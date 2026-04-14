@@ -152,9 +152,9 @@ class VenvManager(EnvBuilder):
             package (str): Package name
             version (str | None): Package version
         """
-        self.print(f"Installing {package} using pip.")
         if version:
             package = f"{package}=={version}"
+        self.print(f"Installing {package} using pip.")
         subprocess.check_call((self.pip_path, "install", package))
 
     def install_pip(self):
