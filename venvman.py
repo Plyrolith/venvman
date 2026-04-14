@@ -73,7 +73,9 @@ class VenvManager(EnvBuilder):
         else:
             major = sys.version_info.major
             minor = sys.version_info.minor
-            lib_path = f"{context.env_dir}/lib/python{major}.{minor}/site-packages"
+            lib_path = (
+                f"{context.env_dir}/lib/python{major}.{minor}/site-packages"
+            )
 
         # Check if already in path and in first position
         try:
@@ -121,7 +123,9 @@ class VenvManager(EnvBuilder):
         ):
             # Call the executable and check its return code
             try:
-                check_args = (env_exe_path, "-c", "import sys; print(sys.executable)")
+                check_args = (
+                    env_exe_path, "-c", "import sys; print(sys.executable)"
+                )
                 subprocess.check_call(check_args)
                 is_valid_exe = True
             except subprocess.CalledProcessError:
@@ -244,7 +248,7 @@ class VenvManager(EnvBuilder):
 
     def freeze_requirements(self):
         """
-        Create or update requirements.txt with all packages in the current version.
+        Create or update requirements.txt current package versions.
         """
         if not self.requirements_file:
             self.print("No requirements file specified.")
@@ -258,12 +262,12 @@ class VenvManager(EnvBuilder):
         ).stdout
         freeze_packages = freeze.split("\n")
 
-        # Read the current requirements and build a list of version-less package names
+        # Read the current requirements and build a list of package names
         with open(self.requirements_file, "r") as req_file:
             req_lines = req_file.readlines()
             packages = [line.split("==")[0] for line in req_lines if line]
 
-        # Write all frozen packages that were already mentioned back into requirements
+        # Write all existing frozen packages back into requirements
         self.print("Re-write only relevant package versions.")
         with open(self.requirements_file, "w") as req_file:
             for freeze_package in freeze_packages:
@@ -282,12 +286,12 @@ class VenvManager(EnvBuilder):
         Install setuptools and pip in the virtual environment.
 
         Args:
-            context (SimpleNamespace): The information for the virtual environment
+            context (SimpleNamespace): Virtual environment information
         """
         os.environ["VIRTUAL_ENV"] = context.env_dir
         try:
             # Check if pip is installed
-            import pip
+            import pip  # noqa: F401
         except ImportError:
             self.install_pip()
 
@@ -305,8 +309,9 @@ class VenvManager(EnvBuilder):
 
     def reader(self, stream: BytesIO):
         """
-        Read lines from a subprocess' output stream and either pass to a progress
-        callable (if specified) or write progress information to sys.stderr.
+        Read lines from a subprocess' output stream.
+        Pass it to a progress callable (if specified) or write progress
+        information to sys.stderr.
 
         Args:
             stream (BytesIO): A stream object from which to read
@@ -347,7 +352,7 @@ class VenvManager(EnvBuilder):
                 if not package or package == "\n":
                     continue
 
-                # Install latest release; this usually throws and error which we ignore
+                # Install latest release; throws and error which we ignore
                 subprocess.run(
                     (self.pip_path, "install", package, "--upgrade"),
                     check=False,
