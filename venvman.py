@@ -41,10 +41,10 @@ class VenvManager(EnvBuilder):
         """
         Create a virtual environment manager.
 
-        Parameters:
-            - venv_path (Path | str): Path to the virtual environment
-            - requirements_file (Path | None): Path to the requirements.txt
-            - verbose (bool): Print verbose output
+        Args:
+            venv_path (Path | str): Path to the virtual environment
+            requirements_file (Path | None): Path to the requirements.txt
+            verbose (bool): Print verbose output
         """
         self.env_dir = Path(venv_path)
         self.requirements_file = requirements_file
@@ -84,7 +84,7 @@ class VenvManager(EnvBuilder):
         Add the virtual environment's site-packages to the path.
 
         Returns:
-            - Path: Path to the virtual environment
+            Path: Path to the virtual environment
         """
         context = self.ensure_directories(self.env_dir)
 
@@ -134,9 +134,9 @@ class VenvManager(EnvBuilder):
         """
         Install a package in the virtual environment.
 
-        Parameters:
-            - package (str): Package name
-            - version (str | None): Package version
+        Args:
+            package (str): Package name
+            version (str | None): Package version
         """
         self.print(f"Installing {package} using pip")
         if version:
@@ -156,7 +156,7 @@ class VenvManager(EnvBuilder):
         Install add-on requirements.
 
         Returns:
-            - list[str] | None: List of installed packages if successful
+            list[str] | None: List of installed packages if successful
         """
         if not self.requirements_file:
             self.print("No requirements file specified")
@@ -192,9 +192,9 @@ class VenvManager(EnvBuilder):
         """
         Install a script in the virtual environment.
 
-        Parameters:
-            - name (str): Script name
-            - url (str): Script URL
+        Args:
+            name (str): Script name
+            url (str): Script URL
         """
         context = self.ensure_directories(self.env_dir)
         _, _, path, _, _, _ = urlparse(url)
@@ -282,8 +282,8 @@ class VenvManager(EnvBuilder):
         """
         Install setuptools and pip in the virtual environment.
 
-        Parameters:
-            - context (SimpleNamespace): The information for the virtual environment
+        Args:
+            context (SimpleNamespace): The information for the virtual environment
         """
         os.environ["VIRTUAL_ENV"] = context.env_dir
         try:
@@ -298,8 +298,8 @@ class VenvManager(EnvBuilder):
         """
         Print information if verbose mode is enabled.
 
-        Parameters:
-            - message (str): Message to print
+        Args:
+            message (str): Message to print
         """
         if self.verbose:
             print(message)
@@ -309,8 +309,8 @@ class VenvManager(EnvBuilder):
         Read lines from a subprocess' output stream and either pass to a progress
         callable (if specified) or write progress information to sys.stderr.
 
-        Parameters:
-            - stream (BytesIO): A stream object from which to read
+        Args:
+            stream (BytesIO): A stream object from which to read
         """
         while True:
             line = stream.readline()
@@ -328,7 +328,7 @@ class VenvManager(EnvBuilder):
         Update packages listed in requirements.txt to the newest version.
 
         Returns:
-            - list[str] | None: List of updated packages if successful
+            list[str] | None: List of updated packages if successful
         """
         if not self.requirements_file:
             self.print("No requirements file specified")
