@@ -358,3 +358,13 @@ class VenvManager(EnvBuilder):
                 subprocess.check_call((self.pip_path, "show", package))
 
         return updated_packages
+
+    def upgrade_package(self, package: str):
+        """
+        Upgrade a package in the virtual environment.
+
+        Args:
+            package (str): Package name
+        """
+        self.print(f"Upgrading {package} using pip.")
+        subprocess.check_call((self.pip_path, "install", "--upgrade", package))
