@@ -60,9 +60,12 @@ class VenvManager(EnvBuilder):
             upgrade_deps=False,
         )
 
-    def append_to_path(self):
+    def add_to_path(self, prepend: bool = False):
         """
         Ensure the virtual environment's site-packages is in the path.
+
+        Args:
+            prepend (bool): Ensure first position
         """
         context = self.ensure_directories(self.env_dir)
         if hasattr(context, "lib_path"):
@@ -72,11 +75,22 @@ class VenvManager(EnvBuilder):
             minor = sys.version_info.minor
             lib_path = f"{context.env_dir}/lib/python{major}.{minor}/site-packages"
 
-        if lib_path not in sys.path:
-            self.print(f"Adding {lib_path} to PYTHONPATH")
-            sys.path.append(lib_path)
+        # Check if already in path and in first position
+        try:
+            index = sys.path.index(lib_path)
+            if not prepend or index == 0:
+                self.print(f"{lib_path} already in PYTHONPATH.")
+                return
+            self.print(f"Moving {lib_path} to first position.")
+            sys.path.pop(index)
+        except ValueError:
+            self.print(f"Adding {lib_path} to PYTHONPATH.")
+
+        # Add to path
+        if prepend:
+            sys.path.insert(0, lib_path)
         else:
-            self.print(f"{lib_path} already in PYTHONPATH")
+            sys.path.append(lib_path)
 
     def initialize(self) -> Path:
         """
@@ -125,7 +139,7 @@ class VenvManager(EnvBuilder):
             self.print("Creating virtual environment")
             self.create(self.env_dir)
 
-        self.append_to_path()
+        self.add_to_path(prepend=True)
         os.environ["VIRTUAL_ENV"] = str(self.env_dir)
 
         return self.env_dir
@@ -326,7 +340,6 @@ class VenvManager(EnvBuilder):
         with open(self.requirements_file) as req_file:
             req_lines = req_file.readlines()
             for line in req_lines:
-
                 # Remove version number to enforce latest release
                 package = line.split("==")[0]
 
