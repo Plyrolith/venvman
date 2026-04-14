@@ -102,7 +102,7 @@ class VenvManager(EnvBuilder):
         """
         context = self.ensure_directories(self.env_dir)
 
-        self.print(f"Checking virtual environment at {self.env_dir}")
+        self.print(f"Checking virtual environment at {self.env_dir}.")
 
         # Check if the virtual environment exists and is complete
         executable_path = Path(context.executable).resolve()
@@ -125,18 +125,18 @@ class VenvManager(EnvBuilder):
                 subprocess.check_call(check_args)
                 is_valid_exe = True
             except subprocess.CalledProcessError:
-                self.print("Non-zero return code from python executable")
+                self.print("Non-zero return code from python executable.")
 
         if is_valid_exe:
-            self.print("Virtual environment verified")
+            self.print("Virtual environment verified.")
 
         else:
             # If the virtual environment exists but is invalid recreate it
             if self.env_dir.exists():
-                self.print("Virtual environment exists, but is invalid")
+                self.print("Virtual environment exists, but is invalid.")
 
             # Create the virtual environment
-            self.print("Creating virtual environment")
+            self.print("Creating virtual environment.")
             self.create(self.env_dir)
 
         self.add_to_path(prepend=True)
@@ -152,7 +152,7 @@ class VenvManager(EnvBuilder):
             package (str): Package name
             version (str | None): Package version
         """
-        self.print(f"Installing {package} using pip")
+        self.print(f"Installing {package} using pip.")
         if version:
             package = f"{package}=={version}"
         subprocess.check_call((self.pip_path, "install", package))
@@ -161,7 +161,7 @@ class VenvManager(EnvBuilder):
         """
         Install pip in the virtual environment.
         """
-        self.print("Installing pip")
+        self.print("Installing pip.")
         url = "https://bootstrap.pypa.io/get-pip.py"
         self.install_script("pip", url)
 
@@ -173,10 +173,10 @@ class VenvManager(EnvBuilder):
             list[str] | None: List of installed packages if successful
         """
         if not self.requirements_file:
-            self.print("No requirements file specified")
+            self.print("No requirements file specified.")
             return
 
-        self.print("Checking/installing dependencies using pip")
+        self.print("Checking/installing dependencies using pip.")
 
         # Use pip freeze in a sub process to extract all installed modules
         freeze = subprocess.run(
@@ -247,7 +247,7 @@ class VenvManager(EnvBuilder):
         Create or update requirements.txt with all packages in the current version.
         """
         if not self.requirements_file:
-            self.print("No requirements file specified")
+            self.print("No requirements file specified.")
             return
 
         # Use pip freeze in a sub process to extract all installed modules
@@ -264,7 +264,7 @@ class VenvManager(EnvBuilder):
             packages = [line.split("==")[0] for line in req_lines if line]
 
         # Write all frozen packages that were already mentioned back into requirements
-        self.print("Re-write only relevant package versions")
+        self.print("Re-write only relevant package versions.")
         with open(self.requirements_file, "w") as req_file:
             for freeze_package in freeze_packages:
                 package = freeze_package.split("==")[0]
@@ -330,10 +330,10 @@ class VenvManager(EnvBuilder):
             list[str] | None: List of updated packages if successful
         """
         if not self.requirements_file:
-            self.print("No requirements file specified")
+            self.print("No requirements file specified.")
             return
 
-        self.print("Updating dependencies using pip")
+        self.print("Updating dependencies using pip.")
 
         # Read requirements file line by line
         updated_packages = []
